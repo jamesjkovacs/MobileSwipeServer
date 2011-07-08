@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
+<!-- above set at the top of the file will set     -->
+<!-- the browser's rendering engine into           -->
+<!-- "Quirks Mode". Replacing this declaration     -->
+<!-- with a "Standards Mode" doctype is supported, -->
+<!-- but may lead to some differences in layout.   -->
+
+<script src="jsonrpc.js"></script>
+<script>
+var jsonService = new JsonRpc.ServiceProxy("/jsonrpc", {
+            asynchronous: true,
+            methods: ['disp.display']
+        });
+		alert("BP1");
+
+// access it asynchronously
+JsonRpc.setAsynchronous(jsonService, true);
+jsonService.disp.display({
+    onSuccess: function(result) {
+        alert("result is " + result);
+    },
+    onException: function(e) {
+        alert("Unable to compute because: " + e);
+        return true;
+    }
+});
+		alert("BP2");
+	</script>
+  </body>
+</html>
