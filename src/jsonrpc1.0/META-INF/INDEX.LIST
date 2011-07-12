@@ -1,0 +1,13 @@
+JarIndex-Version: 1.0
+
+jsonrpc-1.0-server.jar
+META-INF
+META-INF/maven
+META-INF/maven/org.json.rpc
+META-INF/maven/org.json.rpc/jsonrpc
+org
+org/json
+org/json/rpc
+org/json/rpc/commons
+org/json/rpc/server
+
