@@ -7,5 +7,8 @@ public class SimpleDisplayResponse implements DisplayResponse{
 	{
 		return "this is a test";
 	}
-
+	public String processBarcode(String barcode)
+	{
+		return barcode;
+	}
 }
