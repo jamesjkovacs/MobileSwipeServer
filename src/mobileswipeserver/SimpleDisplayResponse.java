@@ -7,8 +7,16 @@ public class SimpleDisplayResponse implements DisplayResponse{
 	{
 		return "this is a test";
 	}
-	public String processBarcode(String barcode)
+	public BarcodeResults processBarcode(int barcode)
 	{
+		BarcodeResults results = new BarcodeResults();
+		results.barcode = String.valueOf(barcode);
+		return results;
+	}
+	public String rpcprocessBarcode(String barcode)
+	{
+		BarcodeResults results = new BarcodeResults();
+		results.barcode = String.valueOf(barcode);
 		return barcode;
 	}
 }

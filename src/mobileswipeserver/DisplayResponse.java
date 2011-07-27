@@ -3,5 +3,6 @@ package mobileswipeserver;
 public interface DisplayResponse {
 
 	   String display();
-	   String processBarcode(String barcode);
+	   BarcodeResults processBarcode(int barcode);
+	   String rpcprocessBarcode(String barcode);
 	}

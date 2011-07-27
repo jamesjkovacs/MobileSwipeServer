@@ -7,7 +7,7 @@
  */
 
 @import <Foundation/CPObject.j>
-
+@import "http://127.0.0.1:8888/js/jsonrpc.js"
 
 @implementation MyAppAppDelegate : CPObject
 {
@@ -47,27 +47,39 @@
 -(void)procBarcode: (id)sender
 {
 	alert("procBarcode") ;
-	var request = [CPURLRequest requestWithURL:@"/jsonrpc"] ;
+	var request = [CPURLRequest requestWithURL:@"/jsonrpc?call=rpcprocessBarcode"] ;
 	[request setHTTPMethod: @"POST"];
 	var httpBody = "{\"version\":\"2.0\",\"method\":\"disp.processBarcode\",\"id\":2,\"params\":[";
 	httpBody = httpBody + [barcodeField stringValue];
 	httpBody = httpBody + "]}";
 	CPLog.debug(httpBody);
-	var jsonString = @"{\"version\":\"2.0\",\"method\":\"disp.processBarcode\",\"id\":2,\"params\":0}";
-	CPLog.debug("jsonString = " + jsonString);
+	//var jsonString = @"{\"version\":\"2.0\",\"method\":\"disp.processBarcode\",\"id\":2}";
+	var jsonString = new Object();
+	jsonString.version = @"2.0";
+	jsonString.method = @"disp.processBarcode";
+	jsonString.id = 2;
+	jsonString.param = [barcodeField stringValue];
+	jsonString.params = new Array();
+	jsonString.params[0] = [barcodeField stringValue];
 	
-	var jsObject = [jsonString objectFromJSON];
+	
+//	jsonString.params = [barcodeField stringValue];
+	CPLog.debug("jsonString = " + jsonString);
+	var jsObject = [CPString JSONFromObject:jsonString];
+	
+//	var jsObject = [stringify objectFromJSON];
 	CPLog.debug("jsObject = " + jsObject);
 	
-	jsObject.params = [self addParam:[barcodeField stringValue]];
+//	jsObject.params = [self addParam:[barcodeField stringValue]];
+	
 //	addParam:"test";
 	
-	CPLog.debug("jsObject.params = " + jsObject.params);
+//	CPLog.debug("jsObject.params = " + jsObject.params);
 	
-	var jsonString2 = [CPString JSONFromObject:jsObject];
-	CPLog.debug("jsonString2 = " + jsonString2);
+//	var jsonString2 = [CPString JSONFromObject:jsObject];
+//	CPLog.debug("jsonString2 = " + jsonString2);
 
-	[request setHTTPBody:httpBody];
+	[request setHTTPBody:jsObject];
 	saveBarcode = [CPURLConnection connectionWithRequest:request delegate:self];
 	
 }
@@ -83,7 +95,7 @@
 	}
 	else if (connection == saveBarcode)
 	{
-		alert("Barcode processed was:" + jdata.result) ;
+		alert("Barcode processed was:" + jdata.result.barcode) ;
 		[self clearConnection:saveBarcode];
 		
 	}
@@ -139,19 +151,20 @@
 - (void)testJscript: (id)sender
 {
 	CPLog.debug("enter testJscript");
-	<script src="js/jsonrpc.js"></script>
+//	<script src="js/jsonrpc.js"></script>
 //	<script>
-	var jsonService = new JsonRpc.ServiceProxy("/jsonrpc", {
+	var jsonService = new JsonRpc.ServiceProxy("/jsonrpc?call=rpcprocessBarcode", {
 	            asynchronous: true,
-	            methods: ['disp.processBarcode', 'disp.display']
+	            methods: ['disp.rpcprocessBarcode', 'disp.display']
 	        });
 
 	// access it asynchronously
 	JsonRpc.setAsynchronous(jsonService, true);
-	jsonService.disp.processBarcode({
-	    params:[9999],
+	jsonService.disp.rpcprocessBarcode({
+	    params:[[barcodeField stringValue]],
 	    onSuccess: function(result) {
 	        alert("result is " + result);
+//	        alert("result is " + barcode);
 	    },
 	    onException: function(e) {
 	        alert("Unable to compute because: " + e);
